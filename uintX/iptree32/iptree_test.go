@@ -299,8 +299,13 @@ func TestTreeByIP(t *testing.T) {
 }
 
 func TestIPv4NetToUint32(t *testing.T) {
+	key, bits := iPv4NetToUint32(&net.IPNet{IP: net.IPv4zero, Mask: iPv4MaxMask})
+	if key != 0 || bits != 32 {
+		t.Errorf("Expected 0x0, 32 pair but got 0x%08x, %d", key, bits)
+	}
+
 	_, n, _ := net.ParseCIDR("192.0.2.0/24")
-	key, bits := iPv4NetToUint32(n)
+	key, bits = iPv4NetToUint32(n)
 	if key != 0xc0000200 || bits != 24 {
 		t.Errorf("Expected 0xc0000200, 24 pair but got 0x%08x, %d", key, bits)
 	}
