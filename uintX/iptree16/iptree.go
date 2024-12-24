@@ -217,7 +217,8 @@ func (t *Tree) enumerate(ch chan Pair) {
 }
 
 func iPv4NetToUint32(n *net.IPNet) (uint32, int) {
-	if len(n.IP) != net.IPv4len {
+	ip := n.IP.To4()
+	if ip == nil {
 		return 0, -1
 	}
 
@@ -226,7 +227,7 @@ func iPv4NetToUint32(n *net.IPNet) (uint32, int) {
 		return 0, -1
 	}
 
-	return packIPToUint32(n.IP), ones
+	return packIPToUint32(ip), ones
 }
 
 func packIPToUint32(x net.IP) uint32 {
